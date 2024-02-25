@@ -175,11 +175,11 @@ void add_sentence_to_end_of_list(StrList* list, const char* sentence, int num)
 
 void StrList_print(const StrList* list) 
 {
-    if (list == NULL || list->_head == NULL) 
-    {
-        printf("");
-        return;
-    }
+    // if (list == NULL || list->_head == NULL) 
+    // {
+    //     printf("");
+    //     return;
+    // }
 
     Node* current = list->_head;
     while (current != NULL) 
