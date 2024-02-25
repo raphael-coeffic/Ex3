@@ -177,7 +177,7 @@ void StrList_print(const StrList* list)
 {
     if (list == NULL || list->_head == NULL) 
     {
-        printf("\n");
+        printf("\n\n");
         return;
     }
 
