@@ -512,7 +512,7 @@ int StrList_isSorted(StrList* list)
             return FALSE;
         }
         current = current->next;
-    }.
+    }
     return TRUE;
 }
 
