@@ -258,6 +258,7 @@ int StrList_count(StrList* list, const char* data)
     int j = 0;
     Node* current = list->_head;
     int bool = TRUE;
+    // we pass on each node and each time that the data apparate we add 1 to count
     while (i < StrList_size(list))
     {
         if (nodes_equal(current, str->_head))
@@ -390,15 +391,15 @@ void StrList_reverse( StrList* list)
 {
     if (list == NULL || list->_head == NULL) return;
     Node* precedent = NULL;
-    Node* current = list->_head; // Courant commence par la tête de la liste.
+    Node* current = list->_head; 
     Node* next = NULL;
 
     while (current != NULL) 
     {
-        next = current->next; // Sauvegarde le nœud suivant.
-        current->next = precedent; // Inverse le pointeur du nœud courant pour qu'il pointe vers le précédent.
-        precedent = current; // Avance le pointeur précédent pour qu'il pointe vers le nœud courant.
-        current = next; // Avance le pointeur courant pour qu'il pointe vers le nœud suivant.
+        next = current->next; // save the next node
+        current->next = precedent; // reverse the pointer of the next node so that it point to the precedent
+        precedent = current; // move the precedent ponter so that it point to current node
+        current = next; // move the current pointer so that it point to the next node
     }
 
     list->_last = list->_head;
@@ -408,40 +409,39 @@ void StrList_reverse( StrList* list)
 
 void StrList_findMiddle(Node* head, Node** frontRef, Node** backRef) 
 {
-    Node* fast;
+    Node* speed;
     Node* slow;
     slow = head;
-    fast = head->next;
+    speed = head->next;
 
-    // Avance 'fast' de deux nœuds, et avance 'slow' d'un noeud
-    while (fast != NULL) 
+    // move speed up by two nodes, and slow by one
+    while (speed != NULL) 
     {
-        fast = fast->next;
-        if (fast != NULL) 
+        speed = speed->next;
+        if (speed != NULL) 
         {
             slow = slow->next;
-            fast = fast->next;
+            speed = speed->next;
         }
     }
 
-    // 'slow' est avant le point milieu dans la liste, donc divisez la liste à ce point
+    // 'slow' is before the midlle in the list so we divide in his place
     *frontRef = head;
     *backRef = slow->next;
     slow->next = NULL;
 }
 
-// Fusionne deux listes triées en une seule liste triée
+// merge two sorted list
 Node* StrList_sortedMerge(Node* a, Node* b) 
 {
     Node* result = NULL;
 
-    // Cas de base
     if (a == NULL)
         return b;
     else if (b == NULL)
         return a;
 
-    // Choisissez a ou b, et récursivement
+    // choose a and b ans recursive
     if (strcmp(a->_data, b->_data) <= 0) 
     {
         result = a;
@@ -455,32 +455,31 @@ Node* StrList_sortedMerge(Node* a, Node* b)
     return result;
 }
 
-// Fonction principale pour trier la liste avec le tri fusion
+// execute the merge sort
 void StrList_mergeSort(Node** headRef) 
 {
     Node* head = *headRef;
     Node* a;
     Node* b;
 
-    // Cas de base -- longueur 0 ou 1
     if ((head == NULL) || (head->next == NULL)) 
     {
         return;
     }
 
-    // Divise la liste en deux moitiés
+    // Divide
     StrList_findMiddle(head, &a, &b);
 
-    // Tri récursivement les deux moitiés
+    // sort recursive
     StrList_mergeSort(&a);
     StrList_mergeSort(&b);
 
-    // Fusionne les deux moitiés triées
+    // merge
     *headRef = StrList_sortedMerge(a, b);
 }
 
 
-// Wrapper pour StrList_mergeSort pour s'adapter à la signature de la fonction demandée
+// execute merge sort on our list
 void StrList_sort(StrList* list) 
 {
     if (list == NULL || list->_head == NULL) 
@@ -488,7 +487,7 @@ void StrList_sort(StrList* list)
         return;
     }
     StrList_mergeSort(&(list->_head));
-    // Mise à jour de _last après le tri
+    // update last
     Node* current = list->_head;
     while (current != NULL && current->next != NULL) 
     {
@@ -501,42 +500,36 @@ int StrList_isSorted(StrList* list)
 {
     if (list == NULL || list->_head == NULL || list->_head->next == NULL) 
     {
-        // La liste est considérée comme triée si elle est vide,
-        // ou contient un seul élément.
         return TRUE;
     }
 
     Node* current = list->_head;
     while (current->next != NULL) 
     {
-        // Compare l'élément courant avec le suivant
+        // Compare the node to the next one
         if (strcmp(current->_data, current->next->_data) > 0) 
         {
-            // Si un élément est plus grand que le suivant,
-            // la liste n'est pas triée en ordre lexicographique.
             return FALSE;
         }
         current = current->next;
-    }
-
-    // Si nous arrivons ici, tous les éléments étaient en ordre lexicographique.
+    }.
     return TRUE;
 }
 
 void add_sentence_to_index_of_list(StrList* list, const char* sentence, int index) 
 {
-    char tempSentence[MAX_LENGTH]; // Pour stocker une copie temporaire de la phrase
+    char tempSentence[MAX_LENGTH]; // for copy
     strncpy(tempSentence, sentence, MAX_LENGTH);
-    tempSentence[MAX_LENGTH - 1] = '\0'; // Assure que la chaîne est terminée
+    tempSentence[MAX_LENGTH - 1] = '\0'; 
 
-    const char* delim = " "; // Délimiteurs pour strtok
-    char* token = strtok(tempSentence, delim); // Découpe la phrase en mots
+    const char* delim = " "; // delimitation : " "
+    char* token = strtok(tempSentence, delim); // cut the sentence by words
     int currentIndex = index;
 
     while (token != NULL) 
     {
-        StrList_insertAt(list, token, currentIndex); // Utilise StrList_insertAt pour chaque mot
-        currentIndex++; // Incrémente l'index pour insérer le prochain mot à la bonne position
+        StrList_insertAt(list, token, currentIndex); 
+        currentIndex++;
         token = strtok(NULL, delim);
     }
 }
