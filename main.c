@@ -21,7 +21,7 @@ int main()
                 getchar();
                 
                 char sentence[MAX_LENGTH]; 
-                fgets(sentence, MAX_LENGTH, stdin); /
+                fgets(sentence, MAX_LENGTH, stdin); 
                 
                 sentence[strcspn(sentence, "\n")] = 0;
                 add_sentence_to_end_of_list(myList, sentence, number);
