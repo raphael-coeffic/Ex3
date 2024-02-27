@@ -1,5 +1,6 @@
 #pragma once
 #include <stdlib.h>
+#include <string.h>
 #define TRUE 1
 #define FALSE 0
 #define MAX_LENGTH 500
