@@ -340,8 +340,6 @@ StrList* StrList_clone(const StrList* list)
 void StrList_remove(StrList* list, const char* data) 
 {
     if (list == NULL || list->_head == NULL) return;
-    int x = StrList_count(list, data);
-
     Node** ptr = &(list->_head);
 
     while (*ptr != NULL) 
